@@ -125,13 +125,15 @@ DriverNode::DriverNode(const rclcpp::NodeOptions & node_options)
   int multi_topic = 0;
   int data_src = kSourceRawLidar;
   double publish_freq = 10.0; /* Hz */
+  double acc_scale = 1.0;
   int output_type = kOutputToRos;
   std::string frame_id;
 
   this->declare_parameter("xfer_format", xfer_format);
   this->declare_parameter("multi_topic", 0);
   this->declare_parameter("data_src", data_src);
-  this->declare_parameter("publish_freq", 10.0);
+  this->declare_parameter("publish_freq", publish_freq);
+  this->declare_parameter("acc_scale", acc_scale);
   this->declare_parameter("output_data_type", output_type);
   this->declare_parameter("frame_id", "frame_default");
   this->declare_parameter("user_config_path", "path_default");
@@ -142,6 +144,7 @@ DriverNode::DriverNode(const rclcpp::NodeOptions & node_options)
   this->get_parameter("multi_topic", multi_topic);
   this->get_parameter("data_src", data_src);
   this->get_parameter("publish_freq", publish_freq);
+  this->get_parameter("acc_scale", acc_scale);
   this->get_parameter("output_data_type", output_type);
   this->get_parameter("frame_id", frame_id);
 
@@ -156,7 +159,7 @@ DriverNode::DriverNode(const rclcpp::NodeOptions & node_options)
   future_ = exit_signal_.get_future();
 
   /** Lidar data distribute control and lidar data source set */
-  lddc_ptr_ = std::make_unique<Lddc>(xfer_format, multi_topic, data_src, output_type, publish_freq, frame_id);
+  lddc_ptr_ = std::make_unique<Lddc>(xfer_format, multi_topic, data_src, output_type, publish_freq, acc_scale, frame_id);
   lddc_ptr_->SetRosNode(this);
 
   if (data_src == kSourceRawLidar) {

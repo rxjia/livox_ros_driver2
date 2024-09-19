@@ -25,6 +25,7 @@ livox_ros2_params = [
     {"multi_topic": multi_topic},
     {"data_src": data_src},
     {"publish_freq": publish_freq},
+    {"acc_scale": 1.0},
     {"output_data_type": output_type},
     {"frame_id": frame_id},
     {"lvx_file_path": lvx_file_path},

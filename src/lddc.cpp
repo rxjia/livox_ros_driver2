@@ -48,6 +48,7 @@ Lddc::Lddc(int format, int multi_topic, int data_src, int output_type,
       data_src_(data_src),
       output_type_(output_type),
       publish_frq_(frq),
+      acc_scale_(acc_scale),
       frame_id_(frame_id),
       enable_lidar_bag_(lidar_bag),
       enable_imu_bag_(imu_bag) {
@@ -62,12 +63,13 @@ Lddc::Lddc(int format, int multi_topic, int data_src, int output_type,
 }
 #elif defined BUILDING_ROS2
 Lddc::Lddc(int format, int multi_topic, int data_src, int output_type,
-           double frq, std::string &frame_id)
+           double frq, double acc_scale, std::string &frame_id)
     : transfer_format_(format),
       use_multi_topic_(multi_topic),
       data_src_(data_src),
       output_type_(output_type),
       publish_frq_(frq),
+      acc_scale_(acc_scale),
       frame_id_(frame_id) {
   publish_period_ns_ = kNsPerSecond / publish_frq_;
   lds_ = nullptr;
@@ -523,9 +525,15 @@ void Lddc::InitImuMsg(const ImuData& imu_data, ImuMsg& imu_msg, uint64_t& timest
   imu_msg.angular_velocity.x = imu_data.gyro_x;
   imu_msg.angular_velocity.y = imu_data.gyro_y;
   imu_msg.angular_velocity.z = imu_data.gyro_z;
-  imu_msg.linear_acceleration.x = imu_data.acc_x;
-  imu_msg.linear_acceleration.y = imu_data.acc_y;
-  imu_msg.linear_acceleration.z = imu_data.acc_z;
+  if(acc_scale_ == 1.0) {
+    imu_msg.linear_acceleration.x = imu_data.acc_x;
+    imu_msg.linear_acceleration.y = imu_data.acc_y;
+    imu_msg.linear_acceleration.z = imu_data.acc_z;
+  } else {
+    imu_msg.linear_acceleration.x = imu_data.acc_x*acc_scale_;
+    imu_msg.linear_acceleration.y = imu_data.acc_y*acc_scale_;
+    imu_msg.linear_acceleration.z = imu_data.acc_z*acc_scale_;
+  }
 }
 
 void Lddc::PublishImuData(LidarImuDataQueue& imu_data_queue, const uint8_t index) {
