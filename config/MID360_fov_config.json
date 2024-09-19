@@ -35,6 +35,19 @@
         "x": 0,
         "y": 0,
         "z": 0
+      },
+      "fov_cfg_en":3,
+      "fov_cfg0": {
+        "yaw_start": 0,
+        "yaw_stop": 45,
+        "pitch_start": -10,
+        "pitch_stop": 60
+      }, 
+      "fov_cfg1": {
+        "yaw_start": 225,
+        "yaw_stop": 270,
+        "pitch_start": -10,
+        "pitch_stop": 60
       }
     }
   ]

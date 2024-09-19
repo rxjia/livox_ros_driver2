@@ -49,7 +49,7 @@ class LivoxLidarConfigParser {
   bool ParseUserConfigs(const rapidjson::Document &doc,
                          std::vector<UserLivoxLidarConfig> &user_configs);
   bool ParseExtrinsics(const rapidjson::Value &value, ExtParameter &param);
-
+  bool ParseFovCfg(const rapidjson::Value &value,FovCfg &fov_cfg);
   const std::string path_;
 };
 

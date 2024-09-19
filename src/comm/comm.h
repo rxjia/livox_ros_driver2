@@ -36,6 +36,7 @@
 #include <memory>
 #include <map>
 
+#include "livox_lidar_def.h"
 #include "lidar_imu_data_queue.h"
 
 namespace livox_ros {
@@ -267,6 +268,9 @@ typedef struct {
   ExtParameter extrinsic_param;
   volatile uint32_t set_bits;
   volatile uint32_t get_bits;
+  uint8_t fov_cfg_en;
+  FovCfg fov_cfg0;
+  FovCfg fov_cfg1;
 } UserLivoxLidarConfig;
 
 /** Lidar data source info abstract */

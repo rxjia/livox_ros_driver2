@@ -87,6 +87,32 @@ void LivoxLidarCallback::LidarInfoChangeCallback(const uint32_t handle,
         std::cout << "set dual emit mode, handle: " << handle << ", enable dual emit: "
                   << static_cast<int32_t>(config.dual_emit_en) << std::endl;
       }
+
+
+      if ((config.fov_cfg_en != 255) && (config.fov_cfg_en & (0x01<<0))) {
+        FovCfg fov_cfg0 = config.fov_cfg0;
+        SetLivoxLidarFovCfg0(config.handle, &fov_cfg0,
+                          LivoxLidarCallback::SetFovCfg0Callback, lds_lidar);
+        std::cout << "set fov_cfg0, handle: " << handle << 
+                ", yaw_start: "<< fov_cfg0.yaw_start << ", yaw_stop: "<< fov_cfg0.yaw_stop << 
+                ", pitch_start: "<< fov_cfg0.pitch_start << ", pitch_stop: "<< fov_cfg0.pitch_stop
+                << std::endl;
+      }
+      if ((config.fov_cfg_en != 255) && (config.fov_cfg_en & (0x01<<1))) {
+        FovCfg fov_cfg1 = config.fov_cfg1;
+        SetLivoxLidarFovCfg1(config.handle, &fov_cfg1,
+                          LivoxLidarCallback::SetFovCfg1Callback, lds_lidar);
+        std::cout << "set fov_cfg1, handle: " << handle << 
+                ", yaw_start: "<< fov_cfg1.yaw_start << ", yaw_stop: "<< fov_cfg1.yaw_stop << 
+                ", pitch_start: "<< fov_cfg1.pitch_start << ", pitch_stop: "<< fov_cfg1.pitch_stop
+                << std::endl;
+      }
+      if ((config.fov_cfg_en != 255) && (config.fov_cfg_en != 255)) {
+      EnableLivoxLidarFov(config.handle, config.fov_cfg_en, 
+                LivoxLidarCallback::EnableLivoxLidarFovCallback, lds_lidar);
+        std::cout << "set fov_cfg_en, handle: " << handle << 
+                ", fov_cfg_en: "<< config.fov_cfg_en << std::endl;
+      }
     } // free lock for set_bits
 
     // set extrinsic params into lidar
@@ -100,11 +126,55 @@ void LivoxLidarCallback::LidarInfoChangeCallback(const uint32_t handle,
     };
     SetLivoxLidarInstallAttitude(config.handle, &attitude,
                                  LivoxLidarCallback::SetAttitudeCallback, lds_lidar);
+    
+                          
   }
 
   std::cout << "begin to change work mode to 'Normal', handle: " << handle << std::endl;
   SetLivoxLidarWorkMode(handle, kLivoxLidarNormal, WorkModeChangedCallback, nullptr);
   EnableLivoxLidarImuData(handle, LivoxLidarCallback::EnableLivoxLidarImuDataCallback, lds_lidar);
+  return;
+}
+
+void LivoxLidarCallback::SetFovCfg0Callback(livox_status status,
+                                                 uint32_t handle,
+                                                 LivoxLidarAsyncControlResponse *response,
+                                                 void *client_data) {
+  if (status != kLivoxLidarStatusSuccess) {
+    std::cout << "failed to SetFovCfg0, handle: " << handle << ", try again..."<< std::endl;
+    // std::this_thread::sleep_for(std::chrono::seconds(1));
+    // SetLivoxLidarWorkMode(handle, kLivoxLidarNormal, WorkModeChangedCallback, nullptr);
+    return;
+  }
+  std::cout << "successfully SetFovCfg0, handle: " << handle << std::endl;
+  return;
+}
+
+void LivoxLidarCallback::SetFovCfg1Callback(livox_status status,
+                                                 uint32_t handle,
+                                                 LivoxLidarAsyncControlResponse *response,
+                                                 void *client_data) {
+  if (status != kLivoxLidarStatusSuccess) {
+    std::cout << "failed to SetFovCfg1, handle: " << handle << ", try again..."<< std::endl;
+    // std::this_thread::sleep_for(std::chrono::seconds(1));
+    // SetLivoxLidarWorkMode(handle, kLivoxLidarNormal, WorkModeChangedCallback, nullptr);
+    return;
+  }
+  std::cout << "successfully SetFovCfg1, handle: " << handle << std::endl;
+  return;
+}
+
+void LivoxLidarCallback::EnableLivoxLidarFovCallback(livox_status status,
+                                                 uint32_t handle,
+                                                 LivoxLidarAsyncControlResponse *response,
+                                                 void *client_data) {
+  if (status != kLivoxLidarStatusSuccess) {
+    std::cout << "failed to EnableLivoxLidarFov, handle: " << handle << ", try again..."<< std::endl;
+    // std::this_thread::sleep_for(std::chrono::seconds(1));
+    // SetLivoxLidarWorkMode(handle, kLivoxLidarNormal, WorkModeChangedCallback, nullptr);
+    return;
+  }
+  std::cout << "successfully EnableLivoxLidarFov, handle: " << handle << std::endl;
   return;
 }
 

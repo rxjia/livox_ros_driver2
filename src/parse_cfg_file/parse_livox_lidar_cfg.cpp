@@ -102,6 +102,33 @@ bool LivoxLidarConfigParser::ParseUserConfigs(const rapidjson::Document &doc,
                   << IpNumToString(user_config.handle) << std::endl;
       }
     }
+
+    if (!config.HasMember("fov_cfg0")) {
+      memset(&user_config.fov_cfg0, 0, sizeof(user_config.fov_cfg0));
+    } else {
+      auto &value = config["fov_cfg0"];
+      if (!ParseFovCfg(value, user_config.fov_cfg0)) {
+        memset(&user_config.fov_cfg0, 0, sizeof(user_config.fov_cfg0));
+        std::cout << "failed to parse fov_cfg0, ip: "
+                  << IpNumToString(user_config.handle) << std::endl;
+      }
+    }
+    if (!config.HasMember("fov_cfg1")) {
+      memset(&user_config.fov_cfg1, 0, sizeof(user_config.fov_cfg0));
+    } else {
+      auto &value = config["fov_cfg1"];
+      if (!ParseFovCfg(value, user_config.fov_cfg1)) {
+        memset(&user_config.fov_cfg1, 0, sizeof(user_config.fov_cfg1));
+        std::cout << "failed to parse fov_cfg1, ip: "
+                  << IpNumToString(user_config.handle) << std::endl;
+      }
+    }
+    if (!config.HasMember("fov_cfg_en")) {
+      user_config.fov_cfg_en = 255;
+    } else {
+      user_config.fov_cfg_en = static_cast<uint8_t>(config["fov_cfg_en"].GetInt());
+    }
+    
     user_config.set_bits = 0;
     user_config.get_bits = 0;
 
@@ -150,6 +177,31 @@ bool LivoxLidarConfigParser::ParseExtrinsics(const rapidjson::Value &value,
     param.z = static_cast<int32_t>(value["z"].GetInt());
   }
 
+  return true;
+}
+
+bool LivoxLidarConfigParser::ParseFovCfg(const rapidjson::Value &value,
+                                             FovCfg &fov_cfg) {
+  if (!value.HasMember("yaw_start")) {
+    fov_cfg.yaw_start = 0;
+  } else {
+    fov_cfg.yaw_start = static_cast<int32_t>(value["yaw_start"].GetInt());
+  }
+  if (!value.HasMember("yaw_stop")) {
+    fov_cfg.yaw_stop = 360;
+  } else {
+    fov_cfg.yaw_stop = static_cast<int32_t>(value["yaw_stop"].GetInt());
+  }
+  if (!value.HasMember("pitch_start")) {
+    fov_cfg.pitch_start = -10;
+  } else {
+    fov_cfg.pitch_start = static_cast<int32_t>(value["pitch_start"].GetInt());
+  }
+  if (!value.HasMember("pitch_stop")) {
+    fov_cfg.pitch_stop = 60;
+  } else {
+    fov_cfg.pitch_stop = static_cast<int32_t>(value["pitch_stop"].GetInt());
+  }
   return true;
 }
 
