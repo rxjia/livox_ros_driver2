@@ -111,7 +111,7 @@ void LivoxLidarCallback::LidarInfoChangeCallback(const uint32_t handle,
       EnableLivoxLidarFov(config.handle, config.fov_cfg_en, 
                 LivoxLidarCallback::EnableLivoxLidarFovCallback, lds_lidar);
         std::cout << "set fov_cfg_en, handle: " << handle << 
-                ", fov_cfg_en: "<< config.fov_cfg_en << std::endl;
+                ", fov_cfg_en: "<< int(config.fov_cfg_en) << std::endl;
       }
     } // free lock for set_bits
 
