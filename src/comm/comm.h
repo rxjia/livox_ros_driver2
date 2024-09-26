@@ -159,6 +159,16 @@ typedef struct {
 } LivoxPointXyzrtlt;
 
 typedef struct {
+  float x;            /**< X axis, Unit:m */
+  float y;            /**< Y axis, Unit:m */
+  float z;            /**< Z axis, Unit:m */
+  float reflectivity; /**< Reflectivity   */
+  uint8_t tag;        /**< Livox point tag   */
+  uint8_t line;       /**< Laser line id     */
+  uint32_t offset_time;   /**timestamp = basetime + offset_time*/
+} LivoxPointXyzrtlOffsetT;
+
+typedef struct {
   float x;
   float y;
   float z;

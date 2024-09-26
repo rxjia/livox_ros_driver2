@@ -45,6 +45,7 @@ typedef enum {
   kPclPxyziMsg = 2,
   kLivoxImuMsg = 3,
   kAllMsg = 4,
+  kLivoxPC2 = 5,
 } TransferType;
 
 /** Type-Definitions based on ROS versions */
@@ -87,6 +88,7 @@ class Lddc final {
   void PollingLidarImuData(uint8_t index, LidarDevice *lidar);
 
   void PublishPointcloud2(LidarDataQueue *queue, uint8_t index);
+  void PublishLivoxPC2(LidarDataQueue *queue, uint8_t index);
   void PublishCustomPointcloud(LidarDataQueue *queue, uint8_t index);
   void PublishPointcloud2AndCustomMsg(LidarDataQueue *queue, uint8_t index);
   void PublishPclMsg(LidarDataQueue *queue, uint8_t index);
@@ -95,6 +97,8 @@ class Lddc final {
 
   void InitPointcloud2MsgHeader(PointCloud2& cloud);
   void InitPointcloud2Msg(const StoragePacket& pkg, PointCloud2& cloud, uint64_t& timestamp);
+  void InitLivoxPC2MsgHeader(PointCloud2& cloud);
+  void InitLivoxPC2Msg(const StoragePacket& pkg, PointCloud2& cloud, uint64_t& timestamp);
   void PublishPointcloud2Data(const uint8_t index, uint64_t timestamp, const PointCloud2& cloud);
 
   void InitCustomMsg(CustomMsg& livox_msg, const StoragePacket& pkg, uint8_t index);
