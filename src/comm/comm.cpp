@@ -53,6 +53,11 @@ std::string IpNumToString(uint32_t ip_num) {
   return std::string(inet_ntoa(ip));
 }
 
+std::string IpNumToStringPrefix(uint32_t ip_num) {
+  std::string ip_prefix = "[ip: " + IpNumToString(ip_num) + "] ";
+  return ip_prefix;
+}
+
 uint32_t IpStringToNum(std::string ip_string) {
   return static_cast<uint32_t>(inet_addr(ip_string.c_str()));
 }

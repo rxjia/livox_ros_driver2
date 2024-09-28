@@ -70,6 +70,9 @@ class LivoxLidarCallback {
   static void EnableLivoxLidarFovCallback(livox_status status, uint32_t handle,
                                   LivoxLidarAsyncControlResponse *response,
                                   void *client_data);
+
+  static void LivoxLidarPushMsgCallback(const uint32_t handle, const uint8_t dev_type, const char* info, void* client_data);
+
  private:
   static LidarDevice* GetLidarDevice(const uint32_t handle, void* client_data);
 };

@@ -310,6 +310,7 @@ constexpr uint32_t kDeviceTypeLidarMid70 = 6;
 bool IsFilePathValid(const char *path_str);
 uint32_t CalculatePacketQueueSize(const double publish_freq);
 std::string IpNumToString(uint32_t ip_num);
+std::string IpNumToStringPrefix(uint32_t ip_num);
 uint32_t IpStringToNum(std::string ip_string);
 std::string ReplacePeriodByUnderline(std::string str);
 

@@ -24,10 +24,15 @@
 
 #include "livox_lidar_callback.h"
 
+#include <arpa/inet.h>
 #include <string>
 #include <thread>
 #include <iostream>
 
+#define LIVOX_INFO(ip_prefix, ...) \
+  std::cout << ip_prefix << __VA_ARGS__ << std::endl;
+#define LIVOX_WARN(ip_prefix, ...) \
+  std::cout << ip_prefix << __VA_ARGS__ << std::endl;
 namespace livox_ros {
 
 void LivoxLidarCallback::LidarInfoChangeCallback(const uint32_t handle,
@@ -398,6 +403,12 @@ LidarDevice* LivoxLidarCallback::GetLidarDevice(const uint32_t handle, void* cli
   }
 
   return &(lds_lidar->lidars_[index]);
+}
+
+void LivoxLidarCallback::LivoxLidarPushMsgCallback(const uint32_t handle, const uint8_t dev_type, const char* info, void* client_data) {
+  std::string ip_prefix = IpNumToStringPrefix(handle); 
+  LIVOX_INFO(ip_prefix, "push msg info: " << std::endl << info)
+  return;
 }
 
 } // namespace livox_ros
