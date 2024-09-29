@@ -25,6 +25,7 @@
 #ifndef LIVOX_ROS_DRIVER_LIVOX_LIDAR_CALLBACK_H_
 #define LIVOX_ROS_DRIVER_LIVOX_LIDAR_CALLBACK_H_
 
+#include <functional>
 #include "../lds.h"
 #include "../lds_lidar.h"
 #include "../comm/comm.h"
@@ -73,6 +74,11 @@ class LivoxLidarCallback {
 
   static void LivoxLidarPushMsgCallback(const uint32_t handle, const uint8_t dev_type, const char* info, void* client_data);
 
+  using LIVOX_CB = std::function<void(livox_status status,
+                                                 uint32_t handle,
+                                                 LivoxLidarAsyncControlResponse *response,
+                                                 void *client_data)>;
+  static LIVOX_CB defaultCallBack(std::string func_name);
  private:
   static LidarDevice* GetLidarDevice(const uint32_t handle, void* client_data);
 };
