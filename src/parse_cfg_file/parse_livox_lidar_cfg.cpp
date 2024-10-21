@@ -23,12 +23,15 @@
 //
 
 #include "parse_livox_lidar_cfg.h"
+
 #include <iostream>
 
-namespace livox_ros {
+namespace livox_ros
+{
 
-bool LivoxLidarConfigParser::Parse(std::vector<UserLivoxLidarConfig> &lidar_configs) {
-  FILE* raw_file = std::fopen(path_.c_str(), "rb");
+bool LivoxLidarConfigParser::Parse(std::vector<UserLivoxLidarConfig> & lidar_configs)
+{
+  FILE * raw_file = std::fopen(path_.c_str(), "rb");
   if (!raw_file) {
     std::cout << "failed to open config file: " << path_ << std::endl;
     return false;
@@ -44,9 +47,9 @@ bool LivoxLidarConfigParser::Parse(std::vector<UserLivoxLidarConfig> &lidar_conf
       std::cout << "failed to parse config jason" << std::endl;
       break;
     }
-    if (!doc.HasMember("lidar_configs") ||
-        !doc["lidar_configs"].IsArray() ||
-        0 == doc["lidar_configs"].Size()) {
+    if (
+      !doc.HasMember("lidar_configs") || !doc["lidar_configs"].IsArray() ||
+      0 == doc["lidar_configs"].Size()) {
       std::cout << "there is no user-defined config" << std::endl;
       break;
     }
@@ -61,10 +64,11 @@ bool LivoxLidarConfigParser::Parse(std::vector<UserLivoxLidarConfig> &lidar_conf
   return false;
 }
 
-bool LivoxLidarConfigParser::ParseUserConfigs(const rapidjson::Document &doc,
-                                              std::vector<UserLivoxLidarConfig> &user_configs) {
-  const rapidjson::Value &lidar_configs = doc["lidar_configs"];
-  for (auto &config : lidar_configs.GetArray()) {
+bool LivoxLidarConfigParser::ParseUserConfigs(
+  const rapidjson::Document & doc, std::vector<UserLivoxLidarConfig> & user_configs)
+{
+  const rapidjson::Value & lidar_configs = doc["lidar_configs"];
+  for (auto & config : lidar_configs.GetArray()) {
     if (!config.HasMember("ip")) {
       continue;
     }
@@ -95,7 +99,7 @@ bool LivoxLidarConfigParser::ParseUserConfigs(const rapidjson::Document &doc,
     if (!config.HasMember("extrinsic_parameter")) {
       memset(&user_config.extrinsic_param, 0, sizeof(user_config.extrinsic_param));
     } else {
-      auto &value = config["extrinsic_parameter"];
+      auto & value = config["extrinsic_parameter"];
       if (!ParseExtrinsics(value, user_config.extrinsic_param)) {
         memset(&user_config.extrinsic_param, 0, sizeof(user_config.extrinsic_param));
         std::cout << "failed to parse extrinsic parameters, ip: "
@@ -106,21 +110,21 @@ bool LivoxLidarConfigParser::ParseUserConfigs(const rapidjson::Document &doc,
     if (!config.HasMember("fov_cfg0")) {
       memset(&user_config.fov_cfg0, 0, sizeof(user_config.fov_cfg0));
     } else {
-      auto &value = config["fov_cfg0"];
+      auto & value = config["fov_cfg0"];
       if (!ParseFovCfg(value, user_config.fov_cfg0)) {
         memset(&user_config.fov_cfg0, 0, sizeof(user_config.fov_cfg0));
-        std::cout << "failed to parse fov_cfg0, ip: "
-                  << IpNumToString(user_config.handle) << std::endl;
+        std::cout << "failed to parse fov_cfg0, ip: " << IpNumToString(user_config.handle)
+                  << std::endl;
       }
     }
     if (!config.HasMember("fov_cfg1")) {
       memset(&user_config.fov_cfg1, 0, sizeof(user_config.fov_cfg0));
     } else {
-      auto &value = config["fov_cfg1"];
+      auto & value = config["fov_cfg1"];
       if (!ParseFovCfg(value, user_config.fov_cfg1)) {
         memset(&user_config.fov_cfg1, 0, sizeof(user_config.fov_cfg1));
-        std::cout << "failed to parse fov_cfg1, ip: "
-                  << IpNumToString(user_config.handle) << std::endl;
+        std::cout << "failed to parse fov_cfg1, ip: " << IpNumToString(user_config.handle)
+                  << std::endl;
       }
     }
     if (!config.HasMember("fov_cfg_en")) {
@@ -128,7 +132,7 @@ bool LivoxLidarConfigParser::ParseUserConfigs(const rapidjson::Document &doc,
     } else {
       user_config.fov_cfg_en = static_cast<uint8_t>(config["fov_cfg_en"].GetInt());
     }
-    
+
     user_config.set_bits = 0;
     user_config.get_bits = 0;
 
@@ -139,13 +143,12 @@ bool LivoxLidarConfigParser::ParseUserConfigs(const rapidjson::Document &doc,
     std::cout << "no valid base configs" << std::endl;
     return false;
   }
-  std::cout << "successfully parse base config, counts: "
-            << user_configs.size() << std::endl;
+  std::cout << "successfully parse base config, counts: " << user_configs.size() << std::endl;
   return true;
 }
 
-bool LivoxLidarConfigParser::ParseExtrinsics(const rapidjson::Value &value,
-                                             ExtParameter &param) {
+bool LivoxLidarConfigParser::ParseExtrinsics(const rapidjson::Value & value, ExtParameter & param)
+{
   if (!value.HasMember("roll")) {
     param.roll = 0.0f;
   } else {
@@ -180,8 +183,8 @@ bool LivoxLidarConfigParser::ParseExtrinsics(const rapidjson::Value &value,
   return true;
 }
 
-bool LivoxLidarConfigParser::ParseFovCfg(const rapidjson::Value &value,
-                                             FovCfg &fov_cfg) {
+bool LivoxLidarConfigParser::ParseFovCfg(const rapidjson::Value & value, FovCfg & fov_cfg)
+{
   if (!value.HasMember("yaw_start")) {
     fov_cfg.yaw_start = 0;
   } else {
@@ -205,4 +208,4 @@ bool LivoxLidarConfigParser::ParseFovCfg(const rapidjson::Value &value,
   return true;
 }
 
-} // namespace livox_ros
+}  // namespace livox_ros

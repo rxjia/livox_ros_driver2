@@ -24,27 +24,38 @@
 
 #pragma once
 
-#include <memory>
 #include <map>
+#include <memory>
 #include <mutex>
 #include <set>
 
 #include "livox_lidar_def.h"
 
-namespace livox_parser {
+namespace livox_parser
+{
 
-class ParseLidarStateInfo {
- public:
-  static bool Parse(const LivoxLidarDiagInternalInfoResponse& resp, std::string& info);
- private:
-  static bool ParseStateInfo(const LivoxLidarDiagInternalInfoResponse& resp, DirectLidarStateInfo& info, std::set<ParamKeyName>& key_mask);
-  static void ParseLidarIpAddr(const LivoxLidarDiagInternalInfoResponse& resp, uint16_t off, DirectLidarStateInfo& info);
-  static void ParseStateInfoHostIPCfg(const LivoxLidarDiagInternalInfoResponse& resp, uint16_t off, DirectLidarStateInfo& info);
-  static void ParsePointCloudHostIpCfg(const LivoxLidarDiagInternalInfoResponse& resp, uint16_t off, DirectLidarStateInfo& info);
-  static void ParseImuDataHostIpCfg(const LivoxLidarDiagInternalInfoResponse& resp, uint16_t off, DirectLidarStateInfo& info);
-  static void ParseIpCfg(const LivoxLidarDiagInternalInfoResponse& resp, uint16_t off, LivoxIpCfg& cfg);
-  static void LivoxLidarStateInfoToJson(const DirectLidarStateInfo& info, const std::set<ParamKeyName>& key_mask, std::string& lidar_info);
+class ParseLidarStateInfo
+{
+public:
+  static bool Parse(const LivoxLidarDiagInternalInfoResponse & resp, std::string & info);
+
+private:
+  static bool ParseStateInfo(
+    const LivoxLidarDiagInternalInfoResponse & resp, DirectLidarStateInfo & info,
+    std::set<ParamKeyName> & key_mask);
+  static void ParseLidarIpAddr(
+    const LivoxLidarDiagInternalInfoResponse & resp, uint16_t off, DirectLidarStateInfo & info);
+  static void ParseStateInfoHostIPCfg(
+    const LivoxLidarDiagInternalInfoResponse & resp, uint16_t off, DirectLidarStateInfo & info);
+  static void ParsePointCloudHostIpCfg(
+    const LivoxLidarDiagInternalInfoResponse & resp, uint16_t off, DirectLidarStateInfo & info);
+  static void ParseImuDataHostIpCfg(
+    const LivoxLidarDiagInternalInfoResponse & resp, uint16_t off, DirectLidarStateInfo & info);
+  static void ParseIpCfg(
+    const LivoxLidarDiagInternalInfoResponse & resp, uint16_t off, LivoxIpCfg & cfg);
+  static void LivoxLidarStateInfoToJson(
+    const DirectLidarStateInfo & info, const std::set<ParamKeyName> & key_mask,
+    std::string & lidar_info);
 };
 
-} // namespace lidar
-
+}  // namespace livox_parser
