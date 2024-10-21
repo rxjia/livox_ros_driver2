@@ -148,7 +148,8 @@ void LivoxLidarCallback::LidarInfoChangeCallback(
       config.handle, &attitude, LivoxLidarCallback::SetAttitudeCallback, lds_lidar);
   }
   LIVOX_INFO_STREAM(ip_prefix, "begin to change work mode to 'Normal'");
-  SetLivoxLidarWorkMode(handle, kLivoxLidarNormal, WorkModeChangedCallback, nullptr);
+
+  SetLivoxLidarWorkMode(handle, kLivoxLidarNormal, WorkModeChangedCallback, lds_lidar);
   EnableLivoxLidarImuData(handle, LivoxLidarCallback::EnableLivoxLidarImuDataCallback, lds_lidar);
   return;
 }
@@ -215,6 +216,13 @@ void LivoxLidarCallback::WorkModeChangedCallback(
   }
   LIVOX_INFO_STREAM(ip_prefix, func_name << " success.");
   return;
+}
+
+void LivoxLidarCallback::WorkModeChangeOnceCallback(
+  livox_status status, uint32_t handle, LivoxLidarAsyncControlResponse * response,
+  void * client_data)
+{
+  return defaultCallBack("WorkModeChangeOnceCallback")(status, handle, response, client_data);
 }
 
 void LivoxLidarCallback::SetDataTypeCallback(
