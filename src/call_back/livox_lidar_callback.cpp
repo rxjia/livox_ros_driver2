@@ -144,6 +144,9 @@ void LivoxLidarCallback::LidarInfoChangeCallback(const uint32_t handle,
                           "set fov_cfg_en: " << int(config.fov_cfg_en));
       }
 
+      // QueryLivoxLidarInternalInfo(handle,
+      // LivoxLidarCallback::QueryInternalInfoCallback, lds_lidar);
+
     } // free lock for set_bits
 
     // set extrinsic params into lidar
@@ -445,6 +448,25 @@ void LivoxLidarCallback::LivoxLidarPushMsgCallback(const uint32_t handle,
   return;
 }
 
+void LivoxLidarCallback::QueryInternalInfoCallback(
+    livox_status status, uint32_t handle,
+    LivoxLidarDiagInternalInfoResponse *response, void *client_data) {
+  std::string func_name = "QueryInternalInfo";
+  std::string ip_prefix = IpNumToStringPrefix(handle);
+
+  if (status != kLivoxLidarStatusSuccess) {
+    LIVOX_WARN_STREAM(ip_prefix, "Query lidar internal info failed.");
+    QueryLivoxLidarInternalInfo(handle, QueryInternalInfoCallback, nullptr);
+    return;
+  }
+
+  if (response == nullptr) {
+    return;
+  }
+
+  std::string info_str;
+  livox_parser::ParseLidarStateInfo::Parse(*response, info_str);
+  LIVOX_INFO_STREAM(ip_prefix, "QueryInternalInfo: " << info_str);
 }
 
 } // namespace livox_ros

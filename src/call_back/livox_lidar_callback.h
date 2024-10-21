@@ -74,6 +74,9 @@ class LivoxLidarCallback {
 
   static void LivoxLidarPushMsgCallback(const uint32_t handle, const uint8_t dev_type, const char* info, void* client_data);
 
+  static void QueryInternalInfoCallback(livox_status status, uint32_t handle,
+                                  LivoxLidarDiagInternalInfoResponse *response,
+                                  void *client_data);
   using LIVOX_CB = std::function<void(livox_status status,
                                                  uint32_t handle,
                                                  LivoxLidarAsyncControlResponse *response,

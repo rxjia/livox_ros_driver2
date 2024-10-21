@@ -87,6 +87,7 @@ ament_auto_add_library(${PROJECT_NAME} SHARED
 
   src/call_back/lidar_common_callback.cpp
   src/call_back/livox_lidar_callback.cpp
+  src/call_back/parse_internal_info.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${livox_sdk_INCLUDE_DIRS})
